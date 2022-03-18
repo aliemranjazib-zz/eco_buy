@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "400546493929",
+    "project_id": "eco-buy",
+    "storage_bucket": "eco-buy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400546493929:android:a57338fcdbb5d696f0c778",
+        "android_client_info": {
+          "package_name": "com.example.eco_buy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "400546493929-6r07cltubm5nulpl5nti92kmrrhccs4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAn-DBnkPIoV69gbFV1uM0kBZ49pTdvyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400546493929-6r07cltubm5nulpl5nti92kmrrhccs4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
