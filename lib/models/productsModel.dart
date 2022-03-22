@@ -5,10 +5,11 @@ class Products {
   String? id;
   String? productName;
   String? detail;
+  String? brand;
   int? price;
   int? discountPrice;
   String? serialCode;
-  List<String>? imageUrls;
+  List<dynamic>? imageUrls;
   bool? isSale;
   bool? isPopular;
   bool? isFavourite;
@@ -19,6 +20,7 @@ class Products {
     required this.productName,
     required this.detail,
     required this.price,
+    required this.brand,
     required this.discountPrice,
     required this.serialCode,
     required this.imageUrls,
@@ -35,6 +37,7 @@ class Products {
       "id": products.id,
       "detail": products.detail,
       "price": products.price,
+      "brand": products.brand,
       "discountPrice": products.discountPrice,
       "serialCode": products.serialCode,
       "imageUrls": products.imageUrls,
@@ -45,7 +48,7 @@ class Products {
     await db.add(data);
   }
 
-  Future<void> updateProducts(String id, Products updateProducts) async {
+  static Future<void> updateProducts(String id, Products updateProducts) async {
     CollectionReference db = FirebaseFirestore.instance.collection("products");
 
     Map<String, dynamic> data = {
@@ -54,6 +57,7 @@ class Products {
       "id": updateProducts.id,
       "detail": updateProducts.detail,
       "price": updateProducts.price,
+      "brand": updateProducts.brand,
       "discountPrice": updateProducts.discountPrice,
       "serialCode": updateProducts.serialCode,
       "imageUrls": updateProducts.imageUrls,
@@ -64,7 +68,7 @@ class Products {
     await db.doc(id).update(data);
   }
 
-  Future<void> deleteProduct(String id) async {
+  static Future<void> deleteProduct(String id) async {
     CollectionReference db = FirebaseFirestore.instance.collection("products");
 
     await db.doc(id).delete();

@@ -1,5 +1,6 @@
 import 'package:eco_buy/screens/landing_screen.dart';
 import 'package:eco_buy/screens/web_side/web_login.dart';
+import 'package:eco_buy/screens/web_side/web_main.dart';
 import 'package:flutter/material.dart';
 
 class LayoutScreen extends StatelessWidget {
@@ -10,7 +11,7 @@ class LayoutScreen extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.minWidth > 600) {
-          return WebLoginScreen();
+          return WebMainScreen();
         } else {
           return LandingScreen();
         }

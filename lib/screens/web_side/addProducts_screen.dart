@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../models/categoryModel.dart';
 import '../home_screen.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -30,6 +31,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController priceC = TextEditingController();
   TextEditingController discountPriceC = TextEditingController();
   TextEditingController serialCodeC = TextEditingController();
+  TextEditingController brandC = TextEditingController();
+
   bool isOnSale = false;
   bool isPopular = false;
   bool isFavourite = false;
@@ -76,7 +79,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       value: selectedValue,
                       items: categories
                           .map((e) => DropdownMenuItem<String>(
-                              value: e, child: Text(e)))
+                              value: e.title, child: Text(e.title!)))
                           .toList(),
                       onChanged: (value) {
                         setState(() {
@@ -128,6 +131,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 EcoTextField(
                   controller: serialCodeC,
                   hintText: "enter product serial code...",
+                  validate: (v) {
+                    if (v!.isEmpty) {
+                      return "should not be empty";
+                    }
+                    return null;
+                  },
+                ),
+                EcoTextField(
+                  controller: brandC,
+                  hintText: "enter product brand...",
                   validate: (v) {
                     if (v!.isEmpty) {
                       return "should not be empty";
@@ -192,7 +205,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
 
                 SwitchListTile(
-                    title: Text("Is this Product on Sale?"),
+                    title: const Text("Is this Product on Sale?"),
                     value: isOnSale,
                     onChanged: (v) {
                       setState(() {
@@ -200,7 +213,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       });
                     }),
                 SwitchListTile(
-                    title: Text("Is this Product Popular?"),
+                    title: const Text("Is this Product Popular?"),
                     value: isPopular,
                     onChanged: (v) {
                       setState(() {
@@ -231,6 +244,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     await Products.addProducts(Products(
             category: selectedValue,
             id: uuid.v4(),
+            brand: brandC.text,
             productName: productNameC.text,
             detail: detailC.text,
             price: int.parse(priceC.text),
@@ -263,7 +277,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   clearFields() {
     setState(() {
-      selectedValue = "";
+      // selectedValue = "";
       productNameC.clear();
     });
   }
