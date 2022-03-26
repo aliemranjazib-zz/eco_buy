@@ -1,3 +1,4 @@
+import 'package:eco_buy/screens/bottom_page.dart';
 import 'package:eco_buy/screens/landing_screen.dart';
 import 'package:eco_buy/screens/layout_screen.dart';
 import 'package:eco_buy/screens/login_screen.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           backgroundColor: Colors.white,
         ),
-        home: LayoutScreen(),
+        home: LandingScreen(),
         routes: {
           WebLoginScreen.id: (context) => WebLoginScreen(),
           WebMainScreen.id: (context) => WebMainScreen(),
