@@ -1,11 +1,11 @@
-import 'package:eco_buy/screens/home_screen.dart';
-import 'package:eco_buy/screens/signup_screen.dart';
+import 'package:eco_buy/screens/bottom_screens/home_screen.dart';
+import 'package:eco_buy/screens/auth_screens/signup_screen.dart';
 import 'package:eco_buy/utils/styles.dart';
 import 'package:eco_buy/widgets/eco_button.dart';
 import 'package:eco_buy/widgets/ecotextfield.dart';
 import 'package:flutter/material.dart';
 
-import '../services/firebase_services.dart';
+import '../../services/firebase_services.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

@@ -1,6 +1,7 @@
 import 'dart:math';
 
-import 'package:eco_buy/screens/home_screen.dart';
+import 'package:eco_buy/screens/bottom_screens/home_screen.dart';
+import 'package:eco_buy/screens/bottom_screens/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -23,28 +24,37 @@ class CategoryHomeBoxes extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
               child: Column(
                 children: [
-                  Container(
-                    height: 12.h,
-                    width: 15.w,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => ProductScreen(
+                                  category: categories[index].title!)));
+                    },
                     child: Container(
-                      child: const Center(
-                          child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                      )),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("${categories[index].image}")),
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     blurRadius: 5,
-                        //     spreadRadius: 3,
-                        //     color: Colors.red.withOpacity(0.4),
-                        //   ),
-                        // ],
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.black),
-                        // color: Colors
-                        //     .primaries[Random().nextInt(categories.length)],
+                      height: 12.h,
+                      width: 15.w,
+                      child: Container(
+                        child: const Center(
+                            child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                        )),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("${categories[index].image}")),
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     blurRadius: 5,
+                          //     spreadRadius: 3,
+                          //     color: Colors.red.withOpacity(0.4),
+                          //   ),
+                          // ],
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black),
+                          // color: Colors
+                          //     .primaries[Random().nextInt(categories.length)],
+                        ),
                       ),
                     ),
                   ),

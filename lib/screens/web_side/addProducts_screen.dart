@@ -13,7 +13,7 @@ import 'package:sizer/sizer.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/categoryModel.dart';
-import '../home_screen.dart';
+import '../bottom_screens/home_screen.dart';
 
 class AddProductScreen extends StatefulWidget {
   // const AddProductScreen({Key? key}) : super(key: key);

@@ -11,8 +11,8 @@ import 'package:eco_buy/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-import '../widgets/category_home_boxex.dart';
-import '../widgets/home_cards.dart';
+import '../../widgets/category_home_boxex.dart';
+import '../../widgets/home_cards.dart';
 
 // List categories = [
 //   "GROCERY",
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Container(
-              height: 72.h,
+              height: 64.h,
               child: SingleChildScrollView(
                 child: Column(
                   children: [

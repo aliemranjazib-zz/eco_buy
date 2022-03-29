@@ -1,4 +1,4 @@
-import 'package:eco_buy/screens/login_screen.dart';
+import 'package:eco_buy/screens/auth_screens/login_screen.dart';
 import 'package:eco_buy/services/firebase_services.dart';
 import 'package:eco_buy/utils/styles.dart';
 import 'package:eco_buy/widgets/eco_button.dart';

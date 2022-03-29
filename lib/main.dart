@@ -1,7 +1,7 @@
 import 'package:eco_buy/screens/bottom_page.dart';
 import 'package:eco_buy/screens/landing_screen.dart';
 import 'package:eco_buy/screens/layout_screen.dart';
-import 'package:eco_buy/screens/login_screen.dart';
+import 'package:eco_buy/screens/auth_screens/login_screen.dart';
 import 'package:eco_buy/screens/web_side/addProducts_screen.dart';
 import 'package:eco_buy/screens/web_side/dashboard_screen.dart';
 import 'package:eco_buy/screens/web_side/deleteProducts_screen.dart';
@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
           backgroundColor: Colors.white,
+          scaffoldBackgroundColor: Colors.white,
         ),
         home: LandingScreen(),
         routes: {
