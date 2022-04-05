@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -45,11 +46,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     // print(allProducts[0].discountPrice);
   }
 
+  addToFavrourite() async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('favourite');
+    await collectionReference
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("items")
+        .add({"pid": allProducts.first.id});
+  }
+
+  removeToFavrourite(String id) async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('favourite');
+    await collectionReference
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("items")
+        .doc(id)
+        .delete();
+  }
+
   @override
   void initState() {
     getDate();
     super.initState();
   }
+
+  bool isfvrt = false;
 
   int selectedIndex = 0;
 
@@ -106,26 +128,52 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ],
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 7.h,
-                      width: 35.w,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(1),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                            child: Text("340 \$",
-                                style: TextStyle(color: Colors.white))),
-                      ),
-                    ),
-                  ),
+                  // Align(
+                  //   alignment: Alignment.center,
+                  //   child: Container(
+                  //     height: 7.h,
+                  //     width: 35.w,
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.black,
+                  //       borderRadius: BorderRadius.circular(1),
+                  //     ),
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(8.0),
+                  //       child: Center(
+                  //           child: Text("340 \$",
+                  //               style: TextStyle(color: Colors.white))),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 1.h,
                   ),
+                  StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('favourite')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .collection('items')
+                          .where('pid', isEqualTo: allProducts.first.id)
+                          .snapshots(),
+                      builder:
+                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.data == null) {
+                          return Text("");
+                        }
+                        return IconButton(
+                            onPressed: () {
+                              snapshot.data!.docs.length == 0
+                                  ? addToFavrourite()
+                                  : removeToFavrourite(
+                                      snapshot.data!.docs.first.id);
+                            },
+                            icon: Icon(
+                              Icons.favorite,
+                              color: snapshot.data!.docs.length == 0
+                                  ? Colors.black
+                                  : Colors.red,
+                            ));
+                      }),
                   Container(
                     constraints: BoxConstraints(
                       minWidth: double.infinity,
@@ -150,6 +198,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ),
                   ),
+
                   Container(
                     child: Row(
                       children: [
@@ -165,8 +214,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           onPressed: () {},
                           icon: Icon(Icons.exposure_plus_1),
                         ),
-                        IconButton(
-                            onPressed: () {}, icon: Icon(Icons.favorite)),
                       ],
                     ),
                   ),
