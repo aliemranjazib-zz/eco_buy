@@ -16,6 +16,8 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   List<Products> allProducts = [];
+  int count = 1;
+  var newPrice = 0;
 
   getDate() async {
     await FirebaseFirestore.instance
@@ -31,16 +33,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               setState(() {
                 allProducts.add(
                   Products(
-                    id: e["id"],
-                    detail: e["detail"],
-                    productName: e["productName"],
-                    imageUrls: e["imageUrls"],
-                  ),
+                      id: e["id"],
+                      detail: e["detail"],
+                      productName: e["productName"],
+                      imageUrls: e["imageUrls"],
+                      price: e['price'],
+                      discountPrice: e['discountPrice']),
                 );
               });
             }
           }
         }
+        newPrice = allProducts.first.price!;
       });
     });
     // print(allProducts[0].discountPrice);
@@ -128,23 +132,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ],
                     ),
                   ),
-                  // Align(
-                  //   alignment: Alignment.center,
-                  //   child: Container(
-                  //     height: 7.h,
-                  //     width: 35.w,
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.black,
-                  //       borderRadius: BorderRadius.circular(1),
-                  //     ),
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.all(8.0),
-                  //       child: Center(
-                  //           child: Text("340 \$",
-                  //               style: TextStyle(color: Colors.white))),
-                  //     ),
-                  //   ),
-                  // ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 7.h,
+                      width: 35.w,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(1),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                            child: Text("${allProducts.first.price} PKR",
+                                style: TextStyle(color: Colors.white))),
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: 1.h,
                   ),
@@ -198,26 +202,88 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ),
                   ),
-
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                        "NOTE :  Discount of ${allProducts.first.discountPrice} PKR will be applied when you order more then three items of this product"),
+                  ),
                   Container(
                     child: Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              if (count > 1) {
+                                count--;
+                                if (count > 3) {
+                                  newPrice =
+                                      count * allProducts.first.discountPrice!;
+                                } else {
+                                    newPrice =
+                                      count * allProducts.first.price!;
+                                }
+                              }
+                            });
+                          },
                           icon: Icon(Icons.exposure_minus_1),
                         ),
                         Text(
-                          "01",
-                          style: TextStyle(fontSize: 12.sp),
+                          "$count",
+                          style: TextStyle(fontSize: 16.sp),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              count++;
+                              if (count > 3) {
+                                  newPrice =
+                                      count * allProducts.first.discountPrice!;
+                                } else {
+                                    newPrice =
+                                      count * allProducts.first.price!;
+                                }
+                            });
+                          },
                           icon: Icon(Icons.exposure_plus_1),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            height: 7.h,
+                            width: 35.w,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(1),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                  child: Text("${newPrice} PKR",
+                                      style: TextStyle(color: Colors.white))),
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 40),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 7.h,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(1),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                            child: Text("ADD TO CART",
+                                style: TextStyle(color: Colors.white))),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 70),
                 ],
               ),
             ),
