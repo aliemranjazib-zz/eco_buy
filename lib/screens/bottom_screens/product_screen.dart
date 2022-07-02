@@ -27,8 +27,7 @@ class _ProductScreenState extends State<ProductScreen> {
       if (widget.category == null) {
         snapshot!.docs.forEach((e) {
           if (e.exists) {
-            for (var item in e["imageUrls"]) {
-              if (item.isNotEmpty) {
+          
                 setState(() {
                   allProducts.add(
                     Products(
@@ -38,8 +37,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                   );
                 });
-              }
-            }
+            
           }
         });
       } else {
@@ -47,8 +45,7 @@ class _ProductScreenState extends State<ProductScreen> {
             .where((element) => element["category"] == widget.category)
             .forEach((e) {
           if (e.exists) {
-            for (var item in e["imageUrls"]) {
-              if (item.isNotEmpty) {
+            
                 setState(() {
                   allProducts.add(
                     Products(
@@ -58,8 +55,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                   );
                 });
-              }
-            }
+             
           }
         });
       }

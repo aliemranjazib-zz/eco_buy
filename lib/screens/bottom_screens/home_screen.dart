@@ -13,6 +13,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../widgets/category_home_boxex.dart';
 import '../../widgets/home_cards.dart';
+import '../product_detail_screen.dart';
 
 // List categories = [
 //   "GROCERY",
@@ -48,28 +49,24 @@ class _HomeScreenState extends State<HomeScreen> {
         .then((QuerySnapshot? snapshot) {
       snapshot!.docs.forEach((e) {
         if (e.exists) {
-          for (var item in e["imageUrls"]) {
-            if (item.isNotEmpty) {
-              setState(() {
-                allProducts.add(
-                  Products(
-                    brand: e["brand"],
-                    category: e["category"],
-                    // id: id,
-                    productName: e["productName"],
-                    detail: e["detail"],
-                    price: e["price"],
-                    discountPrice: e["discountPrice"],
-                    serialCode: e["serialCode"],
-                    imageUrls: e["imageUrls"],
-                    isSale: e["isOnSale"],
-                    isPopular: e["isPopular"],
-                    isFavourite: e["isFavourite"],
-                  ),
-                );
-              });
-            }
-          }
+          setState(() {
+            allProducts.add(
+              Products(
+                brand: e["brand"],
+                category: e["category"],
+                id: e['id'],
+                productName: e["productName"],
+                detail: e["detail"],
+                price: e["price"],
+                discountPrice: e["discountPrice"],
+                serialCode: e["serialCode"],
+                imageUrls: e["imageUrls"],
+                isSale: e["isOnSale"],
+                isPopular: e["isPopular"],
+                isFavourite: e["isFavourite"],
+              ),
+            );
+          });
         }
       });
     });
@@ -167,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(18.0),
                                   child: Text(
-                                    "NEW ARRIVAL",
+                                    "NEW \n ARRIVAL",
                                     textAlign: TextAlign.center,
                                     style: EcoStyle.boldStyle
                                         .copyWith(fontSize: 20),
@@ -218,17 +215,27 @@ class PopularItems extends StatelessWidget {
                   child: Container(
                     child: Column(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.black),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.network(
-                              e.imageUrls![0],
-                              height: 80,
-                              width: 80,
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => ProductDetailScreen(
+                                          id: e.id,
+                                        )));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.black),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.network(
+                                e.imageUrls![0],
+                                height: 80,
+                                width: 80,
+                              ),
                             ),
                           ),
                         ),
@@ -278,7 +285,7 @@ class Brands extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              e.brand![0],
+                              e.brand!,
                               style: EcoStyle.boldStyle.copyWith(
                                   color: Colors.white,
                                   fontStyle: FontStyle.italic),

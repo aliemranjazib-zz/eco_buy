@@ -33,7 +33,7 @@ dependencies:
   firebase_core: ^1.13.1
   carousel_slider: ^4.0.0
   sizer: ^2.0.15
-  flutter_admin_scaffold: ^1.1.0
+  flutter_admin_scaffold: ^1.1.1
   image_picker: ^0.8.4+10
   firebase_storage: ^10.2.9
   cached_network_image: ^3.2.0

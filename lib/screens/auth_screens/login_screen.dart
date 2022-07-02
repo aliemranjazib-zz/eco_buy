@@ -16,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailC = TextEditingController();
+  bool ispassword = true;
 
   TextEditingController passwordC = TextEditingController();
   Future<void> ecoDialogue(String error) async {
@@ -93,10 +94,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           EcoTextField(
                             controller: passwordC,
+                            icon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  ispassword = !ispassword;
+                                });
+                              },
+                              icon: ispassword
+                                  ? const Icon(Icons.visibility)
+                                  : const Icon(Icons.visibility_off),
+                            ),
                             hintText: "Password...",
                             validate: (v) {
                               if (v!.isEmpty) {
-                                return "email is badly formated";
+                                return "password is badly formated";
                               }
                               return null;
                             },

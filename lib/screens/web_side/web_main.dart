@@ -56,27 +56,27 @@ class _WebMainScreenState extends State<WebMainScreen> {
               chooseScreens(item);
             },
             items: const [
-              MenuItem(
+              AdminMenuItem(
                 title: "DASHBOARD",
                 icon: Icons.dashboard,
                 route: DashBoardScreen.id,
               ),
-              MenuItem(
+              AdminMenuItem(
                 title: "ADD PRODUCTS",
                 icon: Icons.add,
                 route: AddProductScreen.id,
               ),
-              MenuItem(
+              AdminMenuItem(
                 title: "UPDATE PRODUCTS",
                 icon: Icons.update,
                 route: UpdateProductScreen.id,
               ),
-              MenuItem(
+              AdminMenuItem(
                 title: "DELETE PRODUCTS",
                 icon: Icons.delete,
                 route: DeleteProductScreen.id,
               ),
-              MenuItem(
+              AdminMenuItem(
                 title: "CART ITEMS",
                 icon: Icons.shop,
               ),

@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eco_buy/models/cartModel.dart';
+import 'package:eco_buy/widgets/eco_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -18,6 +20,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   List<Products> allProducts = [];
   int count = 1;
   var newPrice = 0;
+  bool isLoading = false;
 
   getDate() async {
     await FirebaseFirestore.instance
@@ -89,7 +92,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: Header(
                   title: "${allProducts.first.productName}",
                 ),
-                preferredSize: Size.fromHeight(5.h)),
+                preferredSize: Size.fromHeight(7.h)),
             body: SingleChildScrollView(
               child: Column(
                 children: [
@@ -219,8 +222,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   newPrice =
                                       count * allProducts.first.discountPrice!;
                                 } else {
-                                    newPrice =
-                                      count * allProducts.first.price!;
+                                  newPrice = count * allProducts.first.price!;
                                 }
                               }
                             });
@@ -236,12 +238,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             setState(() {
                               count++;
                               if (count > 3) {
-                                  newPrice =
-                                      count * allProducts.first.discountPrice!;
-                                } else {
-                                    newPrice =
-                                      count * allProducts.first.price!;
-                                }
+                                newPrice =
+                                    count * allProducts.first.discountPrice!;
+                              } else {
+                                newPrice = count * allProducts.first.price!;
+                              }
                             });
                           },
                           icon: Icon(Icons.exposure_plus_1),
@@ -266,22 +267,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ],
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 7.h,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(1),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                            child: Text("ADD TO CART",
-                                style: TextStyle(color: Colors.white))),
-                      ),
-                    ),
+                  EcoButton(
+                    isLoginButton: true,
+                    isLoading: isLoading,
+                    onPress: () {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      Cart.addtoCart(Cart(
+                              id: allProducts.first.id,
+                              image: allProducts.first.imageUrls!.first,
+                              name: allProducts.first.productName,
+                              quantity: count,
+                              price: newPrice))
+                          .whenComplete(() {
+                        setState(() {
+                          isLoading = false;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Added to cart successfully")));
+                        });
+                      });
+                    },
+                    title: "Add to Cart",
                   ),
                   SizedBox(height: 70),
                 ],
