@@ -114,6 +114,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 icon: const Icon(Icons.email),
                               ),
                               EcoTextField(
+                                maxLines: 1,
                                 validate: (v) {
                                   if (v!.isEmpty) {
                                     return "password should not be empty";
@@ -137,6 +138,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 ),
                               ),
                               EcoTextField(
+                                maxLines: 1,
                                 isPassowrd: isretypepassword,
                                 controller: retypepasswordC,
                                 validate: (v) {

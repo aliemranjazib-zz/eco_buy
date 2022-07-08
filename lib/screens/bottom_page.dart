@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_buy/screens/bottom_screens/cart_screen.dart';
+import 'package:eco_buy/screens/bottom_screens/checkout_screen.dart';
 import 'package:eco_buy/screens/bottom_screens/favourite-screen.dart';
 import 'package:eco_buy/screens/bottom_screens/home_screen.dart';
 import 'package:eco_buy/screens/bottom_screens/product_screen.dart';
 import 'package:eco_buy/screens/bottom_screens/profile_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -66,6 +68,7 @@ class _BottomPageState extends State<BottomPage> {
             ],
           )),
           BottomNavigationBarItem(icon: Icon(Icons.favorite_rounded)),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_checkout)),
           BottomNavigationBarItem(icon: Icon(Icons.person)),
         ]),
         tabBuilder: (context, index) {
@@ -87,6 +90,15 @@ class _BottomPageState extends State<BottomPage> {
                 return CupertinoPageScaffold(child: FavouriteScreen());
               }));
             case 4:
+              if (FirebaseAuth.instance.currentUser!.displayName == null) {
+                return CupertinoTabView(builder: ((context) {
+                  return CupertinoPageScaffold(child: ProfileScreen());
+                }));
+              }
+              return CupertinoTabView(builder: ((context) {
+                return CupertinoPageScaffold(child: CheckOutScreen());
+              }));
+            case 5:
               return CupertinoTabView(builder: ((context) {
                 return CupertinoPageScaffold(child: ProfileScreen());
               }));

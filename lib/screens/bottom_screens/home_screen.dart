@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(18.0),
                                   child: Text(
-                                    "NEW \n ARRIVAL",
+                                    "NEW \n ARRIVALS",
                                     textAlign: TextAlign.center,
                                     style: EcoStyle.boldStyle
                                         .copyWith(fontSize: 20),
