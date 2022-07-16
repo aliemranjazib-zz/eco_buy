@@ -27,17 +27,15 @@ class _ProductScreenState extends State<ProductScreen> {
       if (widget.category == null) {
         snapshot!.docs.forEach((e) {
           if (e.exists) {
-          
-                setState(() {
-                  allProducts.add(
-                    Products(
-                      id: e["id"],
-                      productName: e["productName"],
-                      imageUrls: e["imageUrls"],
-                    ),
-                  );
-                });
-            
+            setState(() {
+              allProducts.add(
+                Products(
+                  id: e["id"],
+                  productName: e["productName"],
+                  imageUrls: e["imageUrls"],
+                ),
+              );
+            });
           }
         });
       } else {
@@ -45,17 +43,15 @@ class _ProductScreenState extends State<ProductScreen> {
             .where((element) => element["category"] == widget.category)
             .forEach((e) {
           if (e.exists) {
-            
-                setState(() {
-                  allProducts.add(
-                    Products(
-                      id: e["id"],
-                      productName: e["productName"],
-                      imageUrls: e["imageUrls"],
-                    ),
-                  );
-                });
-             
+            setState(() {
+              allProducts.add(
+                Products(
+                  id: e["id"],
+                  productName: e["productName"],
+                  imageUrls: e["imageUrls"],
+                ),
+              );
+            });
           }
         });
       }

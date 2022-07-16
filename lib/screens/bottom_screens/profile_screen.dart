@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eco_buy/widgets/eco_button.dart';
 import 'package:eco_buy/widgets/ecotextfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,11 +28,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('please complete profile firstly')));
+      if (FirebaseAuth.instance.currentUser!.displayName == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('please complete profile firstly')));
+      }
     });
     super.initState();
   }
+
+  bool isSaving = false;
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   EcoButton(
                     title: 'SAVE',
                     isLoginButton: true,
+                    isLoading: isSaving,
                     onPress: () {
                       if (formKey.currentState!.validate()) {
                         SystemChannels.textInput.invokeMapMethod(
@@ -156,6 +163,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }
                     },
                   ),
+                  EcoButton(
+                    onPress: () {
+                      FirebaseAuth.instance.signOut();
+                    },
+                    title: 'SING OUT',
+                  )
                 ],
               ),
             ),
@@ -165,5 +178,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  saveInfo() {}
+  String? downloadUrl;
+  Future<String?> uploadImage(File filepath, String? reference) async {
+    try {
+      final finalName =
+          '${FirebaseAuth.instance.currentUser!.uid}${DateTime.now().second}';
+      final Reference fbStorage =
+          FirebaseStorage.instance.ref(reference).child(finalName);
+      final UploadTask uploadTask = fbStorage.putFile(filepath);
+      await uploadTask.whenComplete(() async {
+        downloadUrl = await fbStorage.getDownloadURL();
+      });
+
+      return downloadUrl;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  saveInfo() {
+    setState(() {
+      isSaving = true;
+    });
+    uploadImage(File(profilePic!), 'profile').whenComplete(() {
+      Map<String, dynamic> data = {
+        'name': nameC.text,
+        'phone': phoneC.text,
+        'house': houseC.text,
+        'street': streetC.text,
+        'city': cityC.text,
+        'address': addressC.text,
+        'profilePic': profilePic,
+      };
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set(data)
+          .whenComplete(() {
+        FirebaseAuth.instance.currentUser!.updateDisplayName(nameC.text);
+        setState(() {
+          isSaving = false;
+        });
+      });
+    });
+  }
 }

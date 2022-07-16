@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Container(
-              height: 23.h,
+              height: 22.h,
               child: Column(
                 children: [
                   Container(
