@@ -24,6 +24,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController cityC = TextEditingController();
   TextEditingController addressC = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  String? downloadUrl;
+  bool selection = false;
+
+  // String? buttonText;
 
   @override
   void initState() {
@@ -31,6 +35,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (FirebaseAuth.instance.currentUser!.displayName == null) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('please complete profile firstly')));
+      } else {
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .get()
+            .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
+          nameC.text = snapshot['name'];
+          phoneC.text = snapshot['phone'];
+          houseC.text = snapshot['house'];
+          cityC.text = snapshot['city'];
+          streetC.text = snapshot['street'];
+          addressC.text = snapshot['address'];
+          profilePic = snapshot['profilePic'];
+        });
       }
     });
     super.initState();
@@ -67,6 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         if (pickImage != null) {
                           setState(() {
                             profilePic = pickImage.path;
+                            selection = true;
                           });
                         }
                       },
@@ -81,10 +100,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   width: 80,
                                 ),
                               )
-                            : CircleAvatar(
-                                radius: 70,
-                                backgroundImage: FileImage(File(profilePic!)),
-                              ),
+                            : profilePic!.contains('http')
+                                ? CircleAvatar(
+                                    radius: 70,
+                                    backgroundImage: NetworkImage(profilePic!),
+                                  )
+                                : CircleAvatar(
+                                    radius: 70,
+                                    backgroundImage:
+                                        FileImage(File(profilePic!)),
+                                  ),
                       ),
                     ),
                   ),
@@ -149,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   EcoButton(
-                    title: 'SAVE',
+                    title: nameC.text.isEmpty ? 'SAVE' : 'Update',
                     isLoginButton: true,
                     isLoading: isSaving,
                     onPress: () {
@@ -159,7 +184,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         profilePic == null
                             ? ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('select profile pic')))
-                            : saveInfo();
+                            : nameC.text.isEmpty
+                                ? saveInfo()
+                                : update();
                       }
                     },
                   ),
@@ -178,7 +205,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  String? downloadUrl;
   Future<String?> uploadImage(File filepath, String? reference) async {
     try {
       final finalName =
@@ -197,6 +223,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  update() {
+    setState(() {
+      isSaving = true;
+    });
+    if (selection == true) {
+      uploadImage(File(profilePic!), 'profile').whenComplete(() {
+        Map<String, dynamic> data = {
+          'name': nameC.text,
+          'phone': phoneC.text,
+          'house': houseC.text,
+          'street': streetC.text,
+          'city': cityC.text,
+          'address': addressC.text,
+          'profilePic': downloadUrl,
+        };
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update(data)
+            .whenComplete(() {
+          FirebaseAuth.instance.currentUser!.updateDisplayName(nameC.text);
+          setState(() {
+            isSaving = false;
+          });
+        });
+      });
+    } else {
+      Map<String, dynamic> data = {
+        'name': nameC.text,
+        'phone': phoneC.text,
+        'house': houseC.text,
+        'street': streetC.text,
+        'city': cityC.text,
+        'address': addressC.text,
+        'profilePic': profilePic,
+      };
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update(data)
+          .whenComplete(() {
+        FirebaseAuth.instance.currentUser!.updateDisplayName(nameC.text);
+        setState(() {
+          isSaving = false;
+        });
+      });
+    }
+  }
+
   saveInfo() {
     setState(() {
       isSaving = true;
@@ -209,7 +284,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         'street': streetC.text,
         'city': cityC.text,
         'address': addressC.text,
-        'profilePic': profilePic,
+        'profilePic': downloadUrl,
       };
       FirebaseFirestore.instance
           .collection('users')
